@@ -29,6 +29,7 @@ Instructions to run Schedule Builder (commands specific for Windows, adjust acco
 3) Open 2 *command prompt* windows and navigate to the project directory. Powershell may have issues with the frontend, so it's important to use command prompt.
 4) In the IDE's terminal or in a Command Prompt window (if not using an IDE), enter the following commands:
     ```bash
+    npm install
     mvn clean install
     mvn spring-boot:run
     ```
