@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 @Table(name="courses")
 public class Course {
     @Id
-    private int crn_key;
+    private String crn_key;
 
     @Column(name = "subj_code", length=4)
     private String subj_code; // (ex. CSCI)
@@ -48,14 +48,17 @@ public class Course {
     @Column(name = "end_time2", length=5)
     private String end_time2;
 
-    @Column(name = "crn_attributes", length=40)
-    private String crn_attributes;
+    @Column(name = "category", length=2)
+    private String category;
+
+    @Column(name = "completed")
+    private boolean completed;
 
     public Course() {}
 
-    public Course(int crn_key, String subj_code, String crse_number, int credit_hours, String title, String instructor_name, String semester, int year,
+    public Course(String crn_key, String subj_code, String crse_number, int credit_hours, String title, String instructor_name, String semester, int year,
                   String meet_days1, String begin_time1, String end_time1, String meet_days2, String begin_time2,
-                  String end_time2, String crn_attributes) {
+                  String end_time2, String category, boolean completed) {
         this.crn_key = crn_key;
         this.subj_code = subj_code;
         this.crse_number = crse_number;
@@ -70,12 +73,13 @@ public class Course {
         this.meet_days2 = meet_days2;
         this.begin_time2 = begin_time2;
         this.end_time2 = end_time2;
-        this.crn_attributes = crn_attributes;
+        this.category = category;
+        this.completed = completed;
     }
 
     @JsonProperty("crn_key")
-    public int getCrnKey() { return crn_key; }
-    public void setCrnKey(int crn_key) { this.crn_key = crn_key; }
+    public String getCrnKey() { return crn_key; }
+    public void setCrnKey(String crn_key) { this.crn_key = crn_key; }
 
     @JsonProperty("subj_code")
     public String getSubjCode() { return subj_code; }
@@ -129,7 +133,11 @@ public class Course {
     public String getEndTime2() { return end_time2; }
     public void setEndTime2(String end_time2) { this.end_time2 = end_time2; }
 
-    @JsonProperty("crn_attributes")
-    public String getCrnAttributes() { return crn_attributes; }
-    public void setCrnAttributes(String crn_attributes) { this.crn_attributes = crn_attributes; }
+    @JsonProperty("category")
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
+
+    @JsonProperty("completed")
+    public boolean getCompleted() { return completed; }
+    public void setCompleted(boolean completed) { this.completed = completed; }
 }

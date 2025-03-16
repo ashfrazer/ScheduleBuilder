@@ -6,12 +6,11 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.3</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>edu.uca.sdc</groupId>
 	<artifactId>schedulebuilder</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Schedule Builder</name>
 	<description>Web app that builds optimized schedules for students based on requirements, time constraints, and personal preferences.</description>
 	<url/>
 	<licenses>
@@ -80,6 +79,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>3.4.3</version>
 			</plugin>
 		</plugins>
 	</build>

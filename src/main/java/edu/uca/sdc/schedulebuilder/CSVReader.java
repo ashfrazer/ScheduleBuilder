@@ -1,6 +1,8 @@
 package edu.uca.sdc.schedulebuilder;
 
+import edu.uca.sdc.schedulebuilder.DAOs.CourseDAO;
 import edu.uca.sdc.schedulebuilder.entities.Course;
+import edu.uca.sdc.schedulebuilder.services.CategoryService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,14 +15,19 @@ import java.io.IOException;
 public class CSVReader {
 
     private final CourseDAO courseDAO;
+    private final CategoryService categoryService;
 
     @Autowired
-    public CSVReader(CourseDAO courseDAO) {
+    public CSVReader(CourseDAO courseDAO, CategoryService categoryService) {
         this.courseDAO = courseDAO;
+        this.categoryService = categoryService;
     }
 
     @PostConstruct
     public void processCSV() {
+        // Insert categories into CategoryDAO
+        categoryService.insertCategories();
+
         // folder path
         String csvFolderPath = "src/main/resources/CSV/";
 
@@ -60,7 +67,7 @@ public class CSVReader {
                 Course course = new Course();
                 try {
                     // Store values in Course obj, but enter placeholders for empty vals
-                    course.setCrnKey(Integer.parseInt(values[0].isEmpty() ? "0" : values[0])); // CRN Key
+                    course.setCrnKey((values[0].isEmpty() ? "0" : values[0])); // CRN Key
                     course.setSubjCode(values[1].isEmpty() ? "" : values[1]); // Subject Code
                     course.setCrseNumber(values[2].isEmpty() ? "" : values[2]); // Course Num
                     course.setCreditHours(Integer.parseInt(values[3].isEmpty() ? "0" : values[3])); // Credit hrs
@@ -74,7 +81,8 @@ public class CSVReader {
                     course.setMeetDays2(values[11].isEmpty() ? "" : values[11]); // Meeting Days2
                     course.setBeginTime2(values[12].isEmpty() ? "" : values[12]); // Begin Time2
                     course.setEndTime2(values[13].isEmpty() ? "" : values[13]); // End Time2
-                    course.setCrnAttributes(values[14].isEmpty() ? "" : values[14]); // CRN attr
+                    course.setCategory(values[14].isEmpty() ? "" : values[14]); // Categories
+                    course.setCompleted(false); // Completion status
 
                     // Save course to DB
                     courseDAO.save(course);
