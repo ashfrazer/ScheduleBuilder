@@ -96,7 +96,7 @@ public class CourseDAO implements DAO<Course> {
             return course;
         });
         // Only return singular course (general, not individual sections)
-        return courses.getFirst();
+        return courses.get(0);
     }
 
     // Get list of courses by title
