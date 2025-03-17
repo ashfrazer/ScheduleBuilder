@@ -15,36 +15,39 @@ This is full-stack web application that is designed to build fast, efficient sch
 - Schedule generation
 - Prompt for user to select of semesters to make schedules for
 - Prompt for user to enter time constraints
-- Simple deployability
+- Smooth deployability
 
 Installation requirements:
-- [Java 23](https://www.oracle.com/java/technologies/downloads/)
-- [Maven](https://maven.apache.org/)
 - [PostgreSQL](https://www.postgresql.org/download/)
 - [Node.js](https://nodejs.org/en/download)
 
 Instructions to run Schedule Builder (commands specific for Windows, adjust accordingly to other OS)
-1) Clone the repository.
-2) Open project in IDE, if you wish. Otherwise, open a command prompt window and navigate to the project directory.
-3) Open 2 *command prompt* windows and navigate to the project directory. Powershell may have issues with the frontend, so it's important to use command prompt.
-4) In the IDE's terminal or in a Command Prompt window (if not using an IDE), enter the following commands:
+1) **IMPORTANT:** If you do not already have PostgreSQL and Node.js installed, you must install them AND *restart your computer*, otherwise, your device will be unable to run this web app (sorry).
+2) Clone the repository.
+3) Open project in IDE, if you wish. Otherwise, open a Command Prompt window and navigate to the project directory.
+4) Open 2 *Command Prompt* windows and navigate to the project directory. Powershell may have issues with the frontend, so it's important to use command prompt.
+5) Go to PgAdmin (PostgreSQL app) and navigate to Servers > Databases. Right-click *Databases* and create a new database called "schedulebuilder". Press "save" and close PgAdmin.
+6) In the IDE's terminal or in a Command Prompt window (if not using an IDE), enter the following commands:
     ```bash
     npm install
-    mvn clean install
-    mvn spring-boot:run
+    npm install -g http-server
+    mvnw clean install
+    mvnw spring-boot:run
     ```
     The Spring Boot API should now be running. This will create and activate the PostgreSQL database, read in the CSV files, store in course/category information, and activate handlers.
-5) In a separate Command Prompt window, run the following commands:
+7) In a separate Command Prompt window, run the following commands:
     ```bash
     cd src\main\resources
     node server.js
     ```
     This will run the backend server, which connects to Port 3000.
-6) In the final Command Prompt window, run the following commands:
+8) In the final Command Prompt window, run the following commands:
     ```bash
     cd src\main\resources\public
     http-server
     ```
-    This will run the frontend, which connects to Port 8081.
- 7) Open your browser and navigate to http://localhost:8081/. You should see a webpage with categories and courses listed.
- 8) To terminate the frontend, backend, and Spring Boot API, press `ctrl+c` in each Command Prompt window until they are terminated.
+    This will run the frontend, which connects to Port 8080.
+ 9) Open your browser and navigate to http://localhost:8080/. You should see a webpage with categories and courses listed. (If for any reason this does not display the courses, try connecting to http://localhost:8081/.
+ 10) To terminate the frontend, backend, and Spring Boot API, press `CTRL+C` in each Command Prompt window until they are terminated.
+
+If you have any issues, feel free to reach out to me via Discord, where I am very active. My username is @ashfraz.
