@@ -126,4 +126,16 @@ public class Controller {
     public List<Category> getAllCategories() {
         return categoryDAO.getAll();
     }
+
+    // GET: Schedule Configuration settings
+    @GetMapping("/config-schedule")
+    public String configureSchedule() {
+        return "config-schedule";
+    }
+
+    // GET: Schedule Generation page
+    @GetMapping("/schedule-generation")
+    public String scheduleGeneration() {
+        return "schedule-generation";
+    }
 }

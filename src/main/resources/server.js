@@ -9,6 +9,8 @@ app.use(cors({
     origin: 'http://localhost:8081',
 }));
 
+app.use(express.static('public'));
+
 // Get data from Spring Boot API @/courses
 app.get('/courses', async (req, res) => {
     try {

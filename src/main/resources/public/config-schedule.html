@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Configure Schedule Settings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #333;
+        }
+        select {
+            font-size: 18px;
+            padding: 5px;
+            margin-top: 10px;
+        }
+        .confirmation {
+            margin-top: 20px;
+            font-size: 20px;
+            color: green;
+        }
+        .button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .preference-section {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .preference-section select {
+            margin-top: 10px;
+        }
+        .checkboxes {
+            margin-top: 20px;
+        }
+        .checkboxes label {
+            font-size: 16px;
+            display: block;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+<h1>Pre-Scheduling Consultation</h1>
+
+
+<h2>How many semesters do you have left?</h2>
+<select id="semester-select">
+    <option value="1">1 semester</option>
+    <option value="2">2 semesters</option>
+    <option value="3">3 semesters</option>
+    <option value="4">4 semesters</option>
+    <option value="5">5 semesters</option>
+    <option value="6">6 semesters</option>
+</select>
+
+<button class="button" id="next-button">Next</button>
+
+<div id="confirmation" class="confirmation" style="display: none;"></div>
+
+
+
+<div id="credit-hour-preferences" class="preference-section" style="display: none;">
+    <h2>Awesome! Do you have a preference of minimum or maximum credit hours for each semester?</h2>
+    <div>
+        <label for="min-credit-hours">Minimum credit hours per semester:</label>
+        <select id="min-credit-hours">
+            <option value="no-preference">No preference</option>
+            <option value="3">3</option>
+            <option value="6">6</option>
+            <option value="9">9</option>
+            <option value="12">12</option>
+            <option value="15">15</option>
+            <option value="18">18</option>
+        </select>
+    </div>
+    <div>
+        <label for="max-credit-hours">Maximum credit hours per semester:</label>
+        <select id="max-credit-hours">
+            <option value="no-preference">No preference</option>
+            <option value="3">3</option>
+            <option value="6">6</option>
+            <option value="9">9</option>
+            <option value="12">12</option>
+            <option value="15">15</option>
+            <option value="18">18</option>
+        </select>
+    </div>
+    <button class="button" id="submit-hours">Submit Preferences</button>
+</div>
+
+<div id="selected-preferences" class="confirmation" style="display: none;"></div>
+
+
+
+
+<div id="conflict-days" class="preference-section" style="display: none;">
+    <h2>Great! Are there any days of the week that would conflict with your schedule?</h2>
+    <div class="checkboxes">
+        <label><input type="checkbox" id="monday"> Monday</label>
+        <label><input type="checkbox" id="tuesday"> Tuesday</label>
+        <label><input type="checkbox" id="wednesday"> Wednesday</label>
+        <label><input type="checkbox" id="thursday"> Thursday</label>
+        <label><input type="checkbox" id="friday"> Friday</label>
+        <label><input type="checkbox" id="saturday"> Saturday</label>
+        <label><input type="checkbox" id="sunday"> Sunday</label>
+    </div>
+    <button class="button" id="submit-days">Submit Days</button>
+</div>
+
+<div id="selected-days" class="confirmation" style="display: none;"></div>
+
+<div id="schedule-generation" style="display: none;">
+    <p>Ready to make your schedule?</p>
+    <a href="schedule-generation.html"><button class="button">Next</button></a>
+</div>
+
+<script>
+    // Semester 'Next' button
+    document.getElementById('next-button').addEventListener('click', function() {
+        // Semesters
+        const selectedSemesters = document.getElementById('semester-select').value;
+
+        const confirmationDiv = document.getElementById('confirmation');
+        confirmationDiv.textContent = `You have selected ${selectedSemesters} semester(s) remaining.`;
+        confirmationDiv.style.display = 'block';
+
+        document.getElementById('credit-hour-preferences').style.display = 'block';
+    });
+
+    // Min/max credit hours buttons
+    document.getElementById('submit-hours').addEventListener('click', function() {
+        const minCreditHours = document.getElementById('min-credit-hours').value;
+        const maxCreditHours = document.getElementById('max-credit-hours').value;
+
+        const selectedPreferencesDiv = document.getElementById('selected-preferences');
+        selectedPreferencesDiv.textContent = `You selected: Minimum Credit Hours: ${minCreditHours}, Maximum Credit Hours: ${maxCreditHours}.`;
+        selectedPreferencesDiv.style.display = 'block';
+
+        document.getElementById('conflict-days').style.display = 'block';
+    });
+
+    // Days of the week
+    document.getElementById('submit-days').addEventListener('click', function() {
+        const selectedDays = [];
+        if (document.getElementById('monday').checked) selectedDays.push("Monday");
+        if (document.getElementById('tuesday').checked) selectedDays.push("Tuesday");
+        if (document.getElementById('wednesday').checked) selectedDays.push("Wednesday");
+        if (document.getElementById('thursday').checked) selectedDays.push("Thursday");
+        if (document.getElementById('friday').checked) selectedDays.push("Friday");
+        if (document.getElementById('saturday').checked) selectedDays.push("Saturday");
+        if (document.getElementById('sunday').checked) selectedDays.push("Sunday");
+
+        const selectedDaysDiv = document.getElementById('selected-days');
+        if (selectedDays.length > 0) {
+            selectedDaysDiv.textContent = `You selected the following days as conflicts: ${selectedDays.join(", ")}.`;
+        } else {
+            selectedDaysDiv.textContent = "You did not select any days as conflicts.";
+        }
+        selectedDaysDiv.style.display = 'block';
+
+        document.getElementById('schedule-generation').style.display = 'block';
+    });
+</script>
+
+</body>
+</html>
