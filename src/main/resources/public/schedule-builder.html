@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+    TODO:
+        - DYNAMICALLY ADD REMAINING COURSES IN PLACE OF PLACEHOLDERS
+        - ADD TOTAL HOURS UNDERNEATH EACH SEMESTER SCHEDULE BOX
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <title>Schedule Builder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .schedules {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .semester-box {
+            width: 250px;
+            min-height: 200px;
+            background-color: white;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .class-item {
+            padding: 8px;
+            margin: 6px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: grab;
+        }
+
+        .semester-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Build Your Schedule</h1>
+<div class="schedules" id="schedule-container"></div>
+
+<h2>Available Classes</h2>
+<div id="class-list">
+    <!-- REPLACE WITH ACTUAL COURSES FROM "REMAINING COURSES" -->
+    <div class="class-item" draggable="true">Placeholder 1</div>
+    <div class="class-item" draggable="true">Placeholder 2</div>
+    <div class="class-item" draggable="true">Placeholder 3</div>
+    <div class="class-item" draggable="true">Placeholder 4</div>
+</div>
+
+<script>
+    const args = new URLSearchParams(window.location.search);
+    const num_semesters = parseInt(args.get('semesters')) || 1;
+
+    const container = document.getElementById('schedule-container');
+
+    for (let i = 1; i <= num_semesters; i++) {
+        const box = document.createElement('div');
+        box.classList.add('semester-box');
+        box.setAttribute('id', `semester-${i}`);
+        box.innerHTML = `<div class="semester-title">Semester ${i}</div>`;
+
+        // Make each box a drop zone
+        box.addEventListener('dragover', (e) => e.preventDefault());
+        box.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const data = e.dataTransfer.getData('text/plain');
+            const dragged = document.getElementById(data);
+            e.target.appendChild(dragged);
+        });
+
+        container.appendChild(box);
+    }
+
+    const classItems = document.querySelectorAll('.class-item');
+    classItems.forEach((item, index) => {
+        item.setAttribute('id', `class-${index}`);
+        item.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', e.target.id);
+        });
+    });
+</script>
+</body>
+</html>
