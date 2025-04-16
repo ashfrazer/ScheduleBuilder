@@ -4,17 +4,17 @@ This is full-stack web application that is designed to build fast, efficient sch
 
 ---
 
-### VERSION 0.1.0-*alpha*
+### VERSION 0.2.0-*alpha*
 
 **Current** features:
 - Individually listed categories for degree program
 - Remaining required credit hours in each category
 - Interactive courses from which users can toggle completion
+- Prompt for user to select of semesters to make schedules for
+- Prompt for user to enter time constraints
 
 **Missing** features:
 - Schedule generation
-- Prompt for user to select of semesters to make schedules for
-- Prompt for user to enter time constraints
 - Smooth deployability
 
 Installation requirements:
