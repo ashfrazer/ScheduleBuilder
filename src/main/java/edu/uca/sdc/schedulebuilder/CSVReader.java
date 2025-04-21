@@ -28,21 +28,33 @@ public class CSVReader {
         // Insert categories into CategoryDAO
         categoryService.insertCategories();
 
-        // folder path
-        String csvFolderPath = "src/main/resources/CSV/";
+        // folder path - use absolute path in container
+        String csvFolderPath = "/app/CSV/";
 
         // Folder with CSV files
         File csvFolder = new File(csvFolderPath);
 
+        // Check if folder exists
+        if (!csvFolder.exists()) {
+            System.err.println("CSV folder does not exist at: " + csvFolderPath);
+            return;
+        }
+
         // Array of files
         File[] files = csvFolder.listFiles();
+        
+        // Check if files array is null
+        if (files == null) {
+            System.err.println("No files found in CSV folder");
+            return;
+        }
 
         // Save CSV entries to DB
         for (File file : files) {
             try {
                 saveToDB(file.getAbsolutePath());
             } catch (IOException e) {
-                System.out.println("Error reading file: " + e.getMessage());
+                System.err.println("Error reading file: " + e.getMessage());
             }
         }
     }
