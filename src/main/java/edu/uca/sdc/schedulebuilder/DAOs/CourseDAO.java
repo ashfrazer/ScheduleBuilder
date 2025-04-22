@@ -146,6 +146,22 @@ public class CourseDAO implements DAO<Course> {
         });
     }
 
+    // Get remaining (incomplete) courses
+    public List<Course> getRemainingCourses() {
+        // Query to get unique courses that are not completed
+        String q = "SELECT DISTINCT ON (title) * FROM courses WHERE completed = false ORDER BY title, crn_key";
+        
+        return jt.query(q, (rs, rowNum) -> {
+            Course course = new Course();
+            course.setSubjCode(rs.getString("subj_code"));
+            course.setCrseNumber(rs.getString("crse_number"));
+            course.setCreditHours(rs.getInt("credit_hours"));
+            course.setTitle(rs.getString("title"));
+            course.setCategory(rs.getString("category"));
+            course.setCompleted(rs.getBoolean("completed"));
+            return course;
+        });
+    }
 
     // Inserts course into DB
     @Override

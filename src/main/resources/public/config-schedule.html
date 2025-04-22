@@ -4,79 +4,197 @@
     <meta charset="UTF-8">
     <title>Configure Schedule Settings</title>
     <style>
+        :root {
+            --primary-color: #8e44ad;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --background-color: #f5f6fa;
+            --card-background: #ffffff;
+            --text-color: #2c3e50;
+            --border-radius: 8px;
+            --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --transition: all 0.2s ease;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             text-align: center;
-            background-color: #f8f9fa;
-            padding: 20px;
+            background-color: var(--background-color);
+            padding: 15px;
+            color: var(--text-color);
+            line-height: 1.4;
         }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
         h1 {
-            color: #333;
+            color: var(--secondary-color);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
         }
+
         h2 {
-            color: #333;
+            color: var(--secondary-color);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
         }
+
+        .card {
+            background-color: var(--card-background);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin: 1.5rem auto;
+            max-width: 500px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
         select {
-            font-size: 18px;
-            padding: 5px;
-            margin-top: 10px;
+            font-size: 1rem;
+            padding: 0.7rem 1.2rem;
+            margin: 0.8rem 0;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            background-color: var(--card-background);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            max-width: 280px;
+            font-weight: 500;
         }
-        .confirmation {
-            margin-top: 20px;
-            font-size: 20px;
-            color: green;
+
+        select:hover {
+            border-color: var(--primary-color);
         }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(142, 68, 173, 0.2);
+        }
+
         .button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #007bff;
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            background-color: var(--primary-color);
             color: white;
             border: none;
+            border-radius: var(--border-radius);
             cursor: pointer;
+            margin: 0.8rem 0.4rem;
+            transition: var(--transition);
+            text-decoration: none;
+            box-shadow: var(--box-shadow);
+            font-weight: 500;
         }
+
         .button:hover {
-            background-color: #0056b3;
+            background-color: #7d3c98;
+            transform: translateY(-1px);
+        }
+
+        .confirmation {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            display: none;
+            animation: fadeIn 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            font-weight: 500;
+        }
+
+        #schedule-generation {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background-color: var(--card-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            display: none;
+            animation: fadeIn 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        #schedule-generation p {
+            font-size: 1.1rem;
+            margin-bottom: 1.2rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.3rem;
+            }
+            
+            .card {
+                padding: 1.2rem;
+            }
         }
     </style>
 </head>
 <body>
-<h1>Pre-Scheduling Consultation</h1>
+    <div class="container">
+        <h1>Pre-Scheduling Consultation</h1>
+        
+        <div class="card">
+            <h2>How many semesters do you have left?</h2>
+            <select id="semester-select">
+                <option value="1">1 semester</option>
+                <option value="2">2 semesters</option>
+                <option value="3">3 semesters</option>
+                <option value="4">4 semesters</option>
+                <option value="5">5 semesters</option>
+                <option value="6">6 semesters</option>
+            </select>
+            
+            <button class="button" id="next-button">Next</button>
+        </div>
 
-<h2>How many semesters do you have left?</h2>
-<select id="semester-select">
-    <option value="1">1 semester</option>
-    <option value="2">2 semesters</option>
-    <option value="3">3 semesters</option>
-    <option value="4">4 semesters</option>
-    <option value="5">5 semesters</option>
-    <option value="6">6 semesters</option>
-</select>
+        <div id="confirmation" class="confirmation"></div>
 
-<button class="button" id="next-button">Next</button>
+        <div id="schedule-generation">
+            <p>Ready to make your schedule?</p>
+            <button class="button" id="go-to-builder">Next</button>
+        </div>
+    </div>
 
-<div id="confirmation" class="confirmation" style="display: none;"></div>
+    <script>
+        document.getElementById('next-button').addEventListener('click', function() {
+            const selectedSemesters = document.getElementById('semester-select').value;
+            const confirmationDiv = document.getElementById('confirmation');
+            confirmationDiv.textContent = `You have selected ${selectedSemesters} semester(s) remaining.`;
+            confirmationDiv.style.display = 'block';
+            document.getElementById('schedule-generation').style.display = 'block';
+        });
 
-<div id="schedule-generation" style="display: none;">
-    <p>Ready to make your schedule?</p>
-    <button class="button" id="go-to-builder">Next</button>
-</div>
-
-<script>
-    document.getElementById('next-button').addEventListener('click', function() {
-        const selectedSemesters = document.getElementById('semester-select').value;
-
-        const confirmationDiv = document.getElementById('confirmation');
-        confirmationDiv.textContent = `You have selected ${selectedSemesters} semester(s) remaining.`;
-        confirmationDiv.style.display = 'block';
-
-        document.getElementById('schedule-generation').style.display = 'block';
-    });
-    document.getElementById('go-to-builder').addEventListener('click', function () {
-        const selectedSemesters = document.getElementById('semester-select').value;
-        window.location.href = `schedule-builder.html?semesters=${selectedSemesters}`;
-    });
-</script>
-
+        document.getElementById('go-to-builder').addEventListener('click', function () {
+            const selectedSemesters = document.getElementById('semester-select').value;
+            window.location.href = `schedule-builder.html?semesters=${selectedSemesters}`;
+        });
+    </script>
 </body>
 </html>

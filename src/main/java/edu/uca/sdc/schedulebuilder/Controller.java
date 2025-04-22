@@ -138,4 +138,10 @@ public class Controller {
     public String scheduleGeneration() {
         return "schedule-generation";
     }
+
+    // GET: remaining (incomplete) courses
+    @GetMapping("/remaining-courses")
+    public List<Course> getRemainingCourses() {
+        return courseDAO.getRemainingCourses();
+    }
 }
