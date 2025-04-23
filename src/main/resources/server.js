@@ -76,6 +76,9 @@ app.get('/courses/remaining-courses', async (req, res) => {
     try {
         const response = await axios.get('http://localhost:8080/courses/remaining-courses');
         res.json(response.data);
+    } catch (error) {
+        console.error('Error fetching remaining courses:', error);
+        res.status(500).send('Error fetching remaining courses');
     }
 });
 
