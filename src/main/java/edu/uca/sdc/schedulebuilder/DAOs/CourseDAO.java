@@ -148,8 +148,20 @@ public class CourseDAO implements DAO<Course> {
 
     // Get remaining (incomplete) courses
     public List<Course> getRemainingCourses() {
-        // Query to get unique courses that are not completed
-        String q = "SELECT DISTINCT ON (title) * FROM courses WHERE completed = false ORDER BY title, crn_key";
+        // Query to get unique courses that are not completed and belong to categories with remaining required hours
+        String q = "WITH completed_hours AS (" +
+                  "  SELECT c.category, SUM(c.credit_hours) as completed_hrs " +
+                  "  FROM courses c " +
+                  "  WHERE c.completed = true " +
+                  "  GROUP BY c.category" +
+                  ") " +
+                  "SELECT DISTINCT ON (c.title) c.* " +
+                  "FROM courses c " +
+                  "JOIN categories cat ON c.category = cat.id " +
+                  "LEFT JOIN completed_hours ch ON c.category = ch.category " +
+                  "WHERE c.completed = false " +
+                  "AND (cat.required_hrs > COALESCE(ch.completed_hrs, 0)) " + // coalesce: returns first non-null
+                  "ORDER BY c.title, c.crn_key";
         
         return jt.query(q, (rs, rowNum) -> {
             Course course = new Course();
