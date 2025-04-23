@@ -270,12 +270,35 @@
                 fetch(`http://localhost:8080/courses/toggle-completion/${encodeURIComponent(courseTitle)}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ completed: !course.completed })
                 })
-                    .then(response => response.json())
-                    .then(updatedCoursesFromBackend => {
-                        setCourses(updatedCoursesFromBackend);
+                    .then(async response => {
+                        const contentType = response.headers.get('content-type');
+                        if (!response.ok) {
+                            const errorText = await response.text();
+                            throw new Error(`Server error: ${errorText}`);
+                        }
+                        if (contentType && contentType.includes('application/json')) {
+                            return response.json();
+                        } else {
+                            const text = await response.text();
+                            console.warn('Received non-JSON response:', text);
+                            return updatedCourses; // Return the local state if server response is not JSON
+                        }
                     })
-                    .catch(error => console.error("Error toggling course completion:", error));
+                    .then(updatedCoursesFromBackend => {
+                        if (Array.isArray(updatedCoursesFromBackend)) {
+                            setCourses(updatedCoursesFromBackend);
+                        } else {
+                            console.warn('Received invalid response format:', updatedCoursesFromBackend);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error toggling course completion:", error);
+                        // Revert the local state on error
+                        setCourses(courses);
+                        setCategories(categories);
+                    });
             }
 
             // Category abbreviations to full titles

@@ -329,8 +329,8 @@
 
     console.log('Starting to create semester boxes');
 
-    // Get number of semesters from URL parameter, default to 1
-    const numSemesters = parseInt(args.get('semesters')) || 1;
+    // Get number of semesters from URL parameter, default to 8
+    const numSemesters = parseInt(args.get('semesters')) || 8;
     
     // Get the semesters that will be displayed
     const displayedSemesters = semesters.slice(0, numSemesters);
@@ -445,7 +445,7 @@
     // Track remaining hours for each category
     const categoryRemainingHours = {};
     categoryData.forEach(cat => {
-        categoryRemainingHours[cat.id] = cat.requiredHours; // Initialize with required hours
+        categoryRemainingHours[cat.id] = cat.requiredHours;
     });
 
     // Function to update remaining hours for a category
@@ -495,7 +495,7 @@
         .then(([courses, categories]) => {
             console.log('Raw courses data:', courses);
             console.log('Raw categories data:', categories);
-            classList.innerHTML = ''; // Clear loading message
+            classList.innerHTML = '';
             
             // Calculate completed hours for each category
             categoryData.forEach(category => {
@@ -514,7 +514,7 @@
 
             // Group courses by category first
             const coursesByCategory = remainingCourses.reduce((acc, course) => {
-                const category = course.category || 'EL'; // Default to Elective if no category
+                const category = course.category || 'EL';
                 console.log('Grouping course:', course.title, 'into category:', category);
                 if (!acc[category]) acc[category] = [];
                 acc[category].push(course);
@@ -570,6 +570,21 @@
                             const courseElement = document.createElement('div');
                             courseElement.classList.add('class-item');
                             courseElement.setAttribute('id', `course-${category.id}-${index}`);
+                            
+                            // Store the original course data
+                            const originalCourse = filteredSections[0];
+                            console.log('Original course data:', originalCourse);
+                            
+                            const courseData = {
+                                title: originalCourse.title,
+                                subj_code: originalCourse.subj_code,
+                                crse_number: originalCourse.crse_number,
+                                credit_hours: originalCourse.credit_hours,
+                                category: category.id
+                            };
+                            console.log('Storing course data:', courseData);
+                            
+                            courseElement.setAttribute('data-course-data', JSON.stringify(courseData));
 
                             courseElement.innerHTML = `
                                 <div class="course-header">${title}</div>
@@ -598,6 +613,7 @@
                                 sectionElement.setAttribute('data-year', section.year);
                                 sectionElement.setAttribute('data-season', section.semester);
                                 sectionElement.setAttribute('data-course-id', `${category.id}-${index}`);
+                                sectionElement.setAttribute('data-course-title', title);
                                 
                                 sectionElement.innerHTML = `
                                     <button class="remove-button">×</button>
@@ -674,55 +690,45 @@
     });
 
     // Add finalize button functionality
-    document.getElementById('finalizeButton').addEventListener('click', () => {
-        console.log('Finalize button clicked');
-        // Collect all scheduled courses
+    document.getElementById('finalizeButton').addEventListener('click', finalizeSchedule);
+
+    function finalizeSchedule() {
         const scheduledCourses = [];
-        document.querySelectorAll('.semester-box').forEach(box => {
-            const year = box.getAttribute('data-year');
-            const season = box.getAttribute('data-season');
+        const semesterBoxes = document.querySelectorAll('.semester-box');
+        
+        semesterBoxes.forEach(box => {
+            const semesterTitle = box.querySelector('.semester-title').textContent;
+            const [season, year] = semesterTitle.split(' ');
             const sections = box.querySelectorAll('.section-details');
-            
-            console.log(`Processing semester: ${season} ${year}`);
-            console.log(`Found ${sections.length} sections`);
             
             sections.forEach(section => {
                 console.log('Processing section:', section);
-                const courseHeader = section.closest('.class-item')?.querySelector('.course-header');
-                const instructorElement = section.querySelector('div:nth-child(3)');
                 
-                const courseData = {
+                // Get the course title from the data attribute
+                const courseTitle = section.getAttribute('data-course-title');
+                console.log('Course title from data attribute:', courseTitle);
+                
+                const course = {
+                    title: courseTitle,
                     crn: section.querySelector('.section-header').textContent.split(': ')[1].split(' ')[0],
-                    title: courseHeader ? courseHeader.textContent : 'Course Title',
-                    instructor: instructorElement ? instructorElement.textContent.replace('Instructor: ', '') : 'TBA',
-                    year: year,
-                    season: season,
-                    courseId: section.getAttribute('data-course-id'),
                     hours: section.getAttribute('data-hours'),
-                    time1: section.getAttribute('data-time1'),
-                    time2: section.getAttribute('data-time2')
+                    instructor: section.querySelector('div:nth-child(3)').textContent.replace('Instructor: ', ''),
+                    time1: section.getAttribute('data-time1') || '',
+                    time2: section.getAttribute('data-time2') || '',
+                    season: season,
+                    year: parseInt(year)
                 };
                 
-                console.log('Collected course data:', courseData);
-                scheduledCourses.push(courseData);
+                console.log('Course data to be stored:', course);
+                scheduledCourses.push(course);
             });
         });
-
-        console.log('Total courses collected:', scheduledCourses.length);
-        console.log('Courses data:', scheduledCourses);
-
-        if (scheduledCourses.length === 0) {
-            alert('No courses have been scheduled yet. Please add some courses to your schedule before finalizing.');
-            return;
-        }
-
-        // Store the scheduled courses in localStorage
-        localStorage.setItem('finalizedSchedule', JSON.stringify(scheduledCourses));
-        console.log('Data stored in localStorage');
         
-        // Redirect to the final schedule page
+        console.log('All courses to be stored:', scheduledCourses);
+        localStorage.setItem('finalizedSchedule', JSON.stringify(scheduledCourses));
+        console.log('Data stored in localStorage:', localStorage.getItem('finalizedSchedule'));
         window.location.href = '/final-schedule.html';
-    });
+    }
 </script>
 </body>
 </html>

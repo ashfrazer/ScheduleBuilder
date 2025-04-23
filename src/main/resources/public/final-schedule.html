@@ -131,6 +131,13 @@
         document.addEventListener('DOMContentLoaded', () => {
             const scheduleContainer = document.getElementById('scheduleContainer');
             const scheduledCourses = JSON.parse(localStorage.getItem('finalizedSchedule') || '[]');
+            console.log('Retrieved from localStorage in final-schedule.html:', scheduledCourses);
+            
+            // Log each course's title specifically
+            scheduledCourses.forEach((course, index) => {
+                console.log(`Course ${index + 1} title:`, course.title);
+                console.log(`Course ${index + 1} full data:`, course);
+            });
 
             // Group courses by semester
             const coursesBySemester = scheduledCourses.reduce((acc, course) => {
@@ -160,13 +167,15 @@
                 let totalHours = 0;
                 const coursesHtml = semester.courses.map(course => {
                     totalHours += parseInt(course.hours);
+                    console.log('Processing course:', course);
+                    console.log('Course title:', course.title);
                     return `
                         <div class="course-item">
-                            <div class="course-header">${course.title || 'Course Title'}</div>
+                            <div class="course-header">${course.title}</div>
                             <div class="course-details">
                                 <div><span class="label">CRN:</span> <span class="value">${course.crn}</span></div>
                                 <div><span class="label">Hours:</span> <span class="value">${course.hours}</span></div>
-                                <div><span class="label">Instructor:</span> <span class="value">${course.instructor || 'TBA'}</span></div>
+                                <div><span class="label">Instructor:</span> <span class="value">${course.instructor}</span></div>
                                 <div class="label">Meeting Times:</div>
                                 ${course.time1 ? `<div class="time-slot">${course.time1}</div>` : ''}
                                 ${course.time2 ? `<div class="time-slot">${course.time2}</div>` : ''}
