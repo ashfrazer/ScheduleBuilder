@@ -71,6 +71,14 @@ app.get('/courses/categories', async (req, res) => {
     }
 });
 
+// Get remaining courses from Spring Boot API @/courses/remaining-courses
+app.get('/courses/remaining-courses', async (req, res) => {
+    try {
+        const response = await axios.get('http://localhost:8080/courses/remaining-courses');
+        res.json(response.data);
+    }
+});
+
 // Start server (port 3000)
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
